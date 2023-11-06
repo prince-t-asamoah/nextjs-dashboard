@@ -4,10 +4,12 @@ import { lusitana } from '../../ui/fonts';
 import RevenueChart from '../../ui/dashboard/revenue-chart';
 import LatestInvoices from '../../ui/dashboard/latest-invoices';
 import { Suspense } from 'react';
-import { RevenueChartSkeleton } from '@/app/ui/skeletons';
+import {
+    LatestInvoicesSkeleton,
+    RevenueChartSkeleton,
+} from '@/app/ui/skeletons';
 
 export default async function DashboardPage() {
-    const latestInvoices = await fetchLatestInvoices();
     const cardData = await fetchCardData();
 
     return (
@@ -41,7 +43,9 @@ export default async function DashboardPage() {
                 <Suspense fallback={<RevenueChartSkeleton />}>
                     <RevenueChart />
                 </Suspense>
-                <LatestInvoices latestInvoices={latestInvoices} />
+                <Suspense fallback={<LatestInvoicesSkeleton />}>
+                    <LatestInvoices />
+                </Suspense>
             </div>
         </main>
     );
