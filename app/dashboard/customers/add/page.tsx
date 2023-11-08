@@ -1,3 +1,4 @@
+import AddCustomerForm from '@/app/ui/customers/add-form';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 
 export default function AddCustomersPage() {
@@ -13,6 +14,7 @@ export default function AddCustomersPage() {
                     },
                 ]}
             />
+            <AddCustomerForm />
         </main>
     );
 }
