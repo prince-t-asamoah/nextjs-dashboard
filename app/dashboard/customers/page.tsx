@@ -1,4 +1,5 @@
 import { AddCustomerButton } from '@/app/ui/customers/buttons';
+import CustomersTable from '@/app/ui/customers/table';
 import { lusitana } from '@/app/ui/fonts';
 import Search from '@/app/ui/search';
 
@@ -12,6 +13,7 @@ export default function CustomersPage() {
                 <Search placeholder="Search customers..." />
                 <AddCustomerButton />
             </div>
+            <CustomersTable customers={[]} />
         </div>
     );
 }
