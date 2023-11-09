@@ -222,9 +222,12 @@ export async function fetchCustomersTotal() {
     }
 }
 
-export async function fetchFilteredCustomers(query = '') {
+export async function fetchFilteredCustomers(
+    query: string,
+    currentPage: number
+) {
     noStore();
-    const offset = (1 - 1) * ITEMS_PER_PAGE;
+    const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
     try {
         const data = await sql<CustomersTable>`
