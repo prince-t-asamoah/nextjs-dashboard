@@ -2,30 +2,14 @@ import { AtSymbolIcon } from '@heroicons/react/20/solid';
 import { UserCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '../button';
+import UploadImage from './upload-image';
 
 export default function AddCustomerForm() {
     return (
         <form>
             <div className="rounded-md bg-gray-50 p-4 md:p-6">
                 <div className="mb-4 flex justify-center">
-                    <div className="flex flex-col">
-                        <div className="w-40 h-40 bg-white rounded-full">
-                            <UserCircleIcon className='text-gray-600'/>
-                        </div>
-                        <label
-                            htmlFor="image_url"
-                            className="text-gray-600 text-center my-2 py-2 text-sm font-medium lg:hover:bg-gray-200 lg:hover:cursor-pointer rounded-md bg-white"
-                        >
-                            Upload image
-                        </label>
-                        <input
-                            id="image_url"
-                            name="image_url"
-                            type="file"
-                            className="hidden"
-                            aria-describedby="image-url-error"
-                        />
-                    </div>
+                    <UploadImage />
                 </div>
                 <div className="mb-4">
                     <label
