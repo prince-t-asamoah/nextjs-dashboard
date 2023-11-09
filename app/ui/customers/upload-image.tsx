@@ -14,35 +14,48 @@ export default function UploadImage() {
         }
     };
 
+    const handleRemoveImage = () => setImageURL('');
+
     return (
-        <div className="flex flex-col">
-            <div className="w-40 h-40 bg-white rounded-full flex justify-center items-center">
+        <div className="flex flex-col items-center">
+            <div className="w-32 h-32 bg-white rounded-full flex justify-center items-center">
                 {imageURL ? (
-                    <Image
-                        src={imageURL}
-                        alt="Profile image"
-                        width={160}
-                        height={160}
-                        className="w-full h-full rounded-full object-cover"
-                    />
+                    <div className="relative group flex justify-center items-center">
+                        <Image
+                            src={imageURL}
+                            alt="Profile image"
+                            width={128}
+                            height={128}
+                            className="w-full h-full rounded-full object-cover"
+                        />
+                    </div>
                 ) : (
                     <UserCircleIcon className="text-gray-600" />
                 )}
             </div>
-            <label
-                htmlFor="image_url"
-                className="text-gray-600 text-center my-2 py-2 text-sm font-medium lg:hover:bg-gray-200 lg:hover:cursor-pointer rounded-md bg-white"
-            >
-                Upload image
-            </label>
-            <input
-                id="image_url"
-                name="image_url"
-                type="file"
-                className="hidden"
-                aria-describedby="image-url-error"
-                onChange={handleInputOnChange}
-            />
+            <div className="flex gap-2">
+                <label
+                    htmlFor="image_url"
+                    className="text-gray-600 text-center my-2 p-2 text-sm font-medium lg:hover:bg-gray-200 lg:hover:cursor-pointer rounded-md bg-white"
+                >
+                    Upload image
+                </label>
+                <button
+                    type="button"
+                    className="text-sm lg:hover:underline"
+                    onClick={handleRemoveImage}
+                >
+                    Remove image
+                </button>
+                <input
+                    id="image_url"
+                    name="image_url"
+                    type="file"
+                    className="hidden"
+                    aria-describedby="image-url-error"
+                    onChange={handleInputOnChange}
+                />
+            </div>
         </div>
     );
 }
