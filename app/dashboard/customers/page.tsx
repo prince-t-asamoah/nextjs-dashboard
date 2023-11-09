@@ -1,4 +1,4 @@
-import { fetchCustomersTotal, fetchFilteredCustomers } from '@/app/lib/data';
+import { fetchCustomersTotal } from '@/app/lib/data';
 import { PageSearchParams } from '@/app/lib/definitions';
 
 import { AddCustomerButton } from '@/app/ui/customers/buttons';
@@ -11,7 +11,7 @@ export default async function CustomersPage({
     searchParams,
 }: PageSearchParams) {
     const query = searchParams?.query ?? '';
-    const customers = await fetchFilteredCustomers(query);
+    const currentPage = Number(searchParams?.page ?? '1');
     const totalPages = await fetchCustomersTotal();
 
     return (
@@ -23,7 +23,7 @@ export default async function CustomersPage({
                 <Search placeholder="Search customers by name or email" />
                 <AddCustomerButton />
             </div>
-            <CustomersTable customers={customers} />
+            <CustomersTable query={query} currentPage={currentPage} />
             <div className="mt-5 flex w-full justify-center">
                 <Pagination totalPages={totalPages} />
             </div>
