@@ -1,10 +1,13 @@
+import { fetchCustomers, fetchFilteredCustomers } from '@/app/lib/data';
 import { AddCustomerButton } from '@/app/ui/customers/buttons';
 import CustomersTable from '@/app/ui/customers/table';
 import { lusitana } from '@/app/ui/fonts';
 import Pagination from '@/app/ui/pagination';
 import Search from '@/app/ui/search';
 
-export default function CustomersPage() {
+export default async function CustomersPage() {
+    const customers = await fetchCustomers();
+
     return (
         <div className="w-full">
             <div className="flex w-full items-center justify-between">
@@ -14,7 +17,7 @@ export default function CustomersPage() {
                 <Search placeholder="Search customers..." />
                 <AddCustomerButton />
             </div>
-            <CustomersTable customers={[]} />
+            <CustomersTable customers={customers} />
             <div className="mt-5 flex w-full justify-center">
                 <Pagination totalPages={0} />
             </div>
