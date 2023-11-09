@@ -10,6 +10,8 @@ import {
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
 
+const ITEMS_PER_PAGE = 6;
+
 export async function fetchRevenue() {
     noStore();
     try {
@@ -86,7 +88,6 @@ export async function fetchCardData() {
     }
 }
 
-const ITEMS_PER_PAGE = 6;
 export async function fetchFilteredInvoices(
     query: string,
     currentPage: number
@@ -205,8 +206,26 @@ export async function fetchCustomers(query = '') {
     }
 }
 
-export async function fetchFilteredCustomers(query: string) {
+export async function fetchCustomersTotal() {
     noStore();
+    try {
+        const count = await sql`SELECT COUNT(*)
+    FROM customers
+  `;
+        const totalPages = Math.ceil(
+            Number(count.rows[0].count) / ITEMS_PER_PAGE
+        );
+        return totalPages;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch total number of customers.');
+    }
+}
+
+export async function fetchFilteredCustomers(query = '') {
+    noStore();
+    const offset = (1 - 1) * ITEMS_PER_PAGE;
+
     try {
         const data = await sql<CustomersTable>`
 		SELECT
@@ -224,6 +243,7 @@ export async function fetchFilteredCustomers(query: string) {
         customers.email ILIKE ${`%${query}%`}
 		GROUP BY customers.id, customers.name, customers.email, customers.image_url
 		ORDER BY customers.name ASC
+        LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
 	  `;
 
         const customers = data.rows.map((customer) => ({
