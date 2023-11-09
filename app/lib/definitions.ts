@@ -95,3 +95,10 @@ export type InvoiceFormState = {
     };
     message?: string | null;
 };
+
+export type PageSearchParams = {
+    searchParams?: {
+        query?: string;
+        page?: string;
+    };
+};
