@@ -33,16 +33,16 @@ export default function UploadImage() {
                     <UserCircleIcon className="text-gray-600" />
                 )}
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-4 my-4">
                 <label
                     htmlFor="image_url"
-                    className="text-gray-600 text-center my-2 p-2 text-sm font-medium lg:hover:bg-gray-200 lg:hover:cursor-pointer rounded-md bg-white"
+                    className="text-gray-600 text-center p-2 text-sm font-medium lg:hover:bg-gray-200 lg:hover:cursor-pointer rounded-md bg-white"
                 >
                     Upload image
                 </label>
                 <button
                     type="button"
-                    className="text-sm lg:hover:underline"
+                    className="text-gray-600 text-sm lg:hover:underline"
                     onClick={handleRemoveImage}
                 >
                     Remove image
