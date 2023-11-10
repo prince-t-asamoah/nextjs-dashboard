@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { InvoiceFormState } from './definitions';
+import { CustomerFormState, InvoiceFormState } from './definitions';
 import { signIn } from '@/auth';
 
 const InvoiceSchema = z.object({
@@ -19,8 +19,22 @@ const InvoiceSchema = z.object({
     date: z.string(),
 });
 
+const CustomerSchema = z.object({
+    fullName: z
+        .string()
+        .min(1, { message: 'Please provide customer fullname' }),
+    email: z
+        .string()
+        .min(1, { message: 'Please provide customer email' })
+        .email({ message: 'Email format not valid' }),
+});
+
 const CreateInvoice = InvoiceSchema.omit({ id: true, date: true });
 const UpdateInvoice = InvoiceSchema.omit({ id: true, date: true });
+const AddCustomerValidation = CustomerSchema.required({
+    fullName: true,
+    email: true,
+});
 
 export async function createInvoice(
     _state: InvoiceFormState,
@@ -111,4 +125,43 @@ export async function authenticate(
         }
         throw error;
     }
+}
+
+//Customers
+export async function addCustomers(
+    state: CustomerFormState,
+    formData: FormData
+) {
+    const validatedFields = AddCustomerValidation.safeParse({
+        fullName: formData.get('fullName'),
+        email: formData.get('email'),
+    });
+
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing fields. Failed to add new customers.',
+        };
+    }
+    const { fullName, email } = validatedFields.data;
+    try {
+        const user = await sql`
+        INSERT INTO customers (name, email)
+        VALUES (${fullName}, ${email})
+      `;
+        if (user) {
+            revalidatePath('/dashboard/customers');
+        }
+    } catch (error) {
+        console.error(
+            'Database Error: Failed to adding customers',
+            '\n',
+            error
+        );
+        return {
+            ...state,
+            message: 'Error adding new customer',
+        };
+    }
+    redirect('/dashboard/customers');
 }
