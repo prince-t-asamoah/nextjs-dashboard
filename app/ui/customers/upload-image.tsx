@@ -2,9 +2,11 @@
 
 import { UserCircleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import { CustomerFormState } from '@/app/lib/definitions';
 import Image from 'next/image';
+import ErrorMessage from '../error-message';
 
-export default function UploadImage() {
+export default function UploadImage({ state }: { state: CustomerFormState }) {
     const [imageURL, setImageURL] = useState('');
 
     const handleInputOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +37,7 @@ export default function UploadImage() {
             </div>
             <div className="flex gap-4 my-4">
                 <label
-                    htmlFor="image_url"
+                    htmlFor="profile-image"
                     className="text-gray-600 text-center p-2 text-sm font-medium lg:hover:bg-gray-200 lg:hover:cursor-pointer rounded-md bg-white"
                 >
                     Upload image
@@ -48,14 +50,21 @@ export default function UploadImage() {
                     Remove image
                 </button>
                 <input
-                    id="image_url"
-                    name="image_url"
+                    id="profile-image"
+                    name="profileImage"
                     type="file"
+                    accept="image/*"
                     className="hidden"
-                    aria-describedby="image-url-error"
+                    aria-describedby="profile-image-error"
                     onChange={handleInputOnChange}
                 />
             </div>
+            {state.errors?.profileImage && (
+                <ErrorMessage
+                    id="profile-image"
+                    message={state.errors?.profileImage[0]}
+                />
+            )}
         </div>
     );
 }
