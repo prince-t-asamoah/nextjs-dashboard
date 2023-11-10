@@ -17,7 +17,7 @@ export default function UploadImage() {
     const handleRemoveImage = () => setImageURL('');
 
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center mt-4">
             <div className="w-32 h-32 bg-white rounded-full flex justify-center items-center">
                 {imageURL ? (
                     <div className="relative group flex justify-center items-center">
