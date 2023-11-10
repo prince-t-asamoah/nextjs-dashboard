@@ -102,3 +102,8 @@ export type PageSearchParams = {
         page?: string;
     };
 };
+
+export type CustomerFormState = {
+    errors?: { fullName?: string[]; email?: string[] };
+    message?: string;
+};
