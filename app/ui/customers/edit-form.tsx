@@ -5,14 +5,16 @@ import { AtSymbolIcon } from '@heroicons/react/20/solid';
 import { UserCircleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
-import { addCustomers } from '@/app/lib/actions';
+import { updateCustomer } from '@/app/lib/actions';
 import { Customer } from '@/app/lib/definitions';
 import { Button } from '../button';
 import UploadImage from './upload-image';
 import ErrorMessage from '../error-message';
 
 export default function EditCustomerForm({ customer }: { customer: Customer }) {
-    const [state, action] = useFormState(addCustomers, {
+    const updateCustomerById = updateCustomer.bind(null, customer?.id);
+
+    const [state, action] = useFormState(updateCustomerById, {
         errors: {},
         message: '',
     });
