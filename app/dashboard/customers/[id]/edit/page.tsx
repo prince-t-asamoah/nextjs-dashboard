@@ -1,5 +1,6 @@
-import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import { Metadata } from 'next';
+import EditCustomerForm from '@/app/ui/customers/edit-form';
+import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 
 export const metadata: Metadata = {
     title: 'Edit customer',
@@ -24,6 +25,7 @@ export default function EditCustomersPage({
                     },
                 ]}
             />
+            <EditCustomerForm />
         </main>
     );
 }
