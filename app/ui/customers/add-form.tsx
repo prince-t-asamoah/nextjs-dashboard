@@ -20,7 +20,7 @@ export default function AddCustomerForm() {
         <form action={action}>
             <div className="rounded-md bg-gray-50 p-4 md:p-6">
                 <div className="mb-4 flex justify-center">
-                    <UploadImage />
+                    <UploadImage state={state} />
                 </div>
                 <div className="mb-4">
                     <label
@@ -43,7 +43,10 @@ export default function AddCustomerForm() {
                         </div>
                     </div>
                     {state.errors?.fullName && (
-                        <ErrorMessage id="fullName" message={state.errors.fullName[0]} />
+                        <ErrorMessage
+                            id="fullName"
+                            message={state.errors.fullName[0]}
+                        />
                     )}
                 </div>
                 <div className="mb-4">
@@ -67,7 +70,10 @@ export default function AddCustomerForm() {
                         </div>
                     </div>
                     {state.errors?.email && (
-                        <ErrorMessage id="email" message={state.errors.email[0]} />
+                        <ErrorMessage
+                            id="email"
+                            message={state.errors.email[0]}
+                        />
                     )}
                 </div>
                 {state?.message && <ErrorMessage message={state.message} />}
