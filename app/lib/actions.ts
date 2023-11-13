@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { CustomerFormState, InvoiceFormState } from './definitions';
 import { signIn } from '@/auth';
+import { uploadImage } from '../service/cloudinary';
 
 const InvoiceSchema = z.object({
     id: z.string(),
@@ -27,14 +28,20 @@ const CustomerSchema = z.object({
         .string()
         .min(1, { message: 'Please provide customer email' })
         .email({ message: 'Email format not valid' }),
+    profileImage: z.instanceof(File).refine(
+        (file) => {
+            if (file.type === 'application/octet-stream') return true;
+            if (file.type.includes('image')) return true;
+            return false;
+        },
+        {
+            message: 'Only image files are allowed.',
+        }
+    ),
 });
 
 const CreateInvoice = InvoiceSchema.omit({ id: true, date: true });
 const UpdateInvoice = InvoiceSchema.omit({ id: true, date: true });
-const AddCustomerValidation = CustomerSchema.required({
-    fullName: true,
-    email: true,
-});
 
 export async function createInvoice(
     _state: InvoiceFormState,
@@ -132,9 +139,10 @@ export async function addCustomers(
     state: CustomerFormState,
     formData: FormData
 ) {
-    const validatedFields = AddCustomerValidation.safeParse({
+    const validatedFields = CustomerSchema.safeParse({
         fullName: formData.get('fullName'),
         email: formData.get('email'),
+        profileImage: formData.get('profileImage'),
     });
 
     if (!validatedFields.success) {
@@ -143,13 +151,20 @@ export async function addCustomers(
             message: 'Missing fields. Failed to add new customers.',
         };
     }
-    const { fullName, email } = validatedFields.data;
+    const { fullName, email, profileImage } = validatedFields.data;
+
     try {
         const user = await sql`
         INSERT INTO customers (name, email)
         VALUES (${fullName}, ${email})
       `;
         if (user) {
+            // if (profileImage.size > 0) {
+            //     const uploadedImage = await uploadImage(profileImage);
+            //     await sql`UPDATE customers
+            //     SET image_url = '${uploadedImage.secure_url}'
+            //     WHERE id = '${user.rows[0].id}'`;
+            // }
             revalidatePath('/dashboard/customers');
         }
     } catch (error) {
