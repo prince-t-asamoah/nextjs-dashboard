@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { fetchFilteredCustomers } from '@/app/lib/data';
 import { UserCircleIcon } from '@heroicons/react/24/outline';
+import { DeleteCustomer, UpdateCustomer } from './buttons';
 
 export default async function CustomersTable({
     query,
@@ -67,11 +68,19 @@ export default async function CustomersTable({
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="pt-4 text-sm">
-                                            <p>
+                                        <div className="flex justify-between pt-4">
+                                            <p className="text-sm">
                                                 {customer.total_invoices}{' '}
                                                 invoices
                                             </p>
+                                            <div className="flex gap-2">
+                                                <UpdateCustomer
+                                                    id={customer.id}
+                                                />
+                                                <DeleteCustomer
+                                                    id={customer.id}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
@@ -109,10 +118,16 @@ export default async function CustomersTable({
                                         >
                                             Total Paid
                                         </th>
+                                        <th
+                                            scope="col"
+                                            className="px-4 py-5 font-medium"
+                                        >
+                                            Actions
+                                        </th>
                                     </tr>
                                 </thead>
 
-                                <tbody className="divide-y divide-gray-200 text-gray-900">
+                                <tbody className="divide-y bg-white divide-gray-200 text-gray-900">
                                     {customers.map((customer) => (
                                         <tr key={customer.id} className="group">
                                             <td className="whitespace-nowrap bg-white py-5 pl-4 pr-3 text-sm text-black group-first-of-type:rounded-md group-last-of-type:rounded-md sm:pl-6">
@@ -148,6 +163,16 @@ export default async function CustomersTable({
                                             </td>
                                             <td className="whitespace-nowrap bg-white px-4 py-5 text-sm group-first-of-type:rounded-md group-last-of-type:rounded-md">
                                                 {customer.total_paid}
+                                            </td>
+                                            <td className="whitespace-nowrap py-3 pl-6 pr-3">
+                                                <div className="flex gap-3">
+                                                    <UpdateCustomer
+                                                        id={customer.id}
+                                                    />
+                                                    <DeleteCustomer
+                                                        id={customer.id}
+                                                    />
+                                                </div>
                                             </td>
                                         </tr>
                                     ))}
