@@ -2,12 +2,18 @@
 
 import { UserCircleIcon } from '@heroicons/react/24/outline';
 import { useState, useRef } from 'react';
-import { CustomerFormState } from '@/app/lib/definitions';
+import { Customer, CustomerFormState } from '@/app/lib/definitions';
 import Image from 'next/image';
 import ErrorMessage from '../error-message';
 
-export default function UploadImage({ state }: { state: CustomerFormState }) {
-    const [imageURL, setImageURL] = useState('');
+export default function UploadImage({
+    state,
+    imageSrc,
+}: {
+    state: CustomerFormState;
+    imageSrc?: string;
+}) {
+    const [imageURL, setImageURL] = useState(imageSrc ?? '');
     const imageRef = useRef<HTMLInputElement>(null);
 
     const handleInputOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
