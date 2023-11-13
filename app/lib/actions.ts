@@ -180,3 +180,51 @@ export async function addCustomers(
     }
     redirect('/dashboard/customers');
 }
+
+export async function updateCustomer(
+    id: string,
+    state: CustomerFormState,
+    formData: FormData
+) {
+    const validatedFields = CustomerSchema.safeParse({
+        fullName: formData.get('fullName'),
+        email: formData.get('email'),
+        profileImage: formData.get('profileImage'),
+    });
+
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing fields. Failed to update customer.',
+        };
+    }
+    const { fullName, email, profileImage } = validatedFields.data;
+
+    try {
+        const user = await sql`
+            UPDATE customers
+            SET name=${fullName}, email=${email}
+            WHERE id=${id}
+          `;
+        if (user) {
+            // if (profileImage.size > 0) {
+            //     const uploadedImage = await uploadImage(profileImage);
+            //     await sql`UPDATE customers
+            //     SET image_url = '${uploadedImage.secure_url}'
+            //     WHERE id = '${user.rows[0].id}'`;
+            // }
+            revalidatePath('/dashboard/customers');
+        }
+    } catch (error) {
+        console.error(
+            'Database Error: Failed to update customers',
+            '\n',
+            error
+        );
+        return {
+            ...state,
+            message: 'Error updating customer',
+        };
+    }
+    redirect('/dashboard/customers');
+}
