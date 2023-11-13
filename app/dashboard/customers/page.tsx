@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { fetchCustomersTotal } from '@/app/lib/data';
 import { PageSearchParams } from '@/app/lib/definitions';
 
@@ -6,6 +7,7 @@ import CustomersTable from '@/app/ui/customers/table';
 import { lusitana } from '@/app/ui/fonts';
 import Pagination from '@/app/ui/pagination';
 import Search from '@/app/ui/search';
+import { CustomerTableSkeleton } from '@/app/ui/skeletons';
 
 export default async function CustomersPage({
     searchParams,
@@ -23,7 +25,9 @@ export default async function CustomersPage({
                 <Search placeholder="Search customers by name or email" />
                 <AddCustomerButton />
             </div>
-            <CustomersTable query={query} currentPage={currentPage} />
+            <Suspense fallback={<CustomerTableSkeleton />}>
+                <CustomersTable query={query} currentPage={currentPage} />
+            </Suspense>
             <div className="mt-5 flex w-full justify-center">
                 <Pagination totalPages={totalPages} />
             </div>
