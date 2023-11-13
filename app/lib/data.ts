@@ -6,6 +6,7 @@ import {
     LatestInvoiceRaw,
     User,
     Revenue,
+    Customer,
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
@@ -173,7 +174,7 @@ export async function fetchInvoiceById(id: string) {
     }
 }
 
-export async function fetchCustomers(query = '') {
+export async function fetchCustomers() {
     noStore();
     try {
         const data = await sql<CustomersTable>`
@@ -187,9 +188,6 @@ export async function fetchCustomers(query = '') {
 		  SUM(CASE WHEN invoices.status = 'paid' THEN invoices.amount ELSE 0 END) AS total_paid
 		FROM customers
 		LEFT JOIN invoices ON customers.id = invoices.customer_id
-		WHERE
-		  customers.name ILIKE ${`%${query}%`} OR
-        customers.email ILIKE ${`%${query}%`}
 		GROUP BY customers.id, customers.name, customers.email, customers.image_url
 		ORDER BY customers.name ASC
 	  `;
@@ -203,6 +201,18 @@ export async function fetchCustomers(query = '') {
     } catch (err) {
         console.error('Database Error:', err);
         throw new Error('Failed to fetch all customers.');
+    }
+}
+
+export async function fetchCustomerById(id: string) {
+    noStore();
+    try {
+        const customer = await sql`SELECT * FROM customers
+        WHERE id = ${id}`;
+        return customer.rows[0] as Customer;
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error(`Failed to fetch customer with id ${id}`);
     }
 }
 
