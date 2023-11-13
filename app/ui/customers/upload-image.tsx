@@ -1,13 +1,14 @@
 'use client';
 
 import { UserCircleIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { CustomerFormState } from '@/app/lib/definitions';
 import Image from 'next/image';
 import ErrorMessage from '../error-message';
 
 export default function UploadImage({ state }: { state: CustomerFormState }) {
     const [imageURL, setImageURL] = useState('');
+    const imageRef = useRef<HTMLInputElement>(null);
 
     const handleInputOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -16,7 +17,13 @@ export default function UploadImage({ state }: { state: CustomerFormState }) {
         }
     };
 
-    const handleRemoveImage = () => setImageURL('');
+    const handleRemoveImage = () => {
+        const inputElement = imageRef.current;
+        if (inputElement) {
+            inputElement.files = null;
+            setImageURL('');
+        }
+    };
 
     return (
         <div className="flex flex-col items-center mt-4">
@@ -57,6 +64,7 @@ export default function UploadImage({ state }: { state: CustomerFormState }) {
                     className="hidden"
                     aria-describedby="profile-image-error"
                     onChange={handleInputOnChange}
+                    ref={imageRef}
                 />
             </div>
             {state.errors?.profileImage && (
