@@ -104,6 +104,6 @@ export type PageSearchParams = {
 };
 
 export type CustomerFormState = {
-    errors?: { fullName?: string[]; email?: string[] };
+    errors?: { fullName?: string[]; email?: string[]; profileImage?: string[] };
     message?: string;
 };
