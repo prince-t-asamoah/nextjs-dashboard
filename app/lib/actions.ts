@@ -228,3 +228,12 @@ export async function updateCustomer(
     }
     redirect('/dashboard/customers');
 }
+
+export async function deleteCustomer(id: string) {
+    try {
+        await sql`DELETE FROM customers WHERE id = ${id}`;
+    } catch (error) {
+        console.error('Database Error: Failed to delete customer', '\n', error);
+    }
+    revalidatePath('/dashboard/customers');
+}
