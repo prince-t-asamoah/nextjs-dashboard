@@ -1,13 +1,13 @@
 import { Suspense } from 'react';
-import { fetchCustomersTotal } from '@/app/lib/data';
-import { PageSearchParams } from '@/app/lib/definitions';
 
+import { PageSearchParams } from '@/app/lib/definitions';
 import { AddCustomerButton } from '@/app/ui/customers/buttons';
 import CustomersTable from '@/app/ui/customers/table';
 import { lusitana } from '@/app/ui/fonts';
 import Pagination from '@/app/ui/pagination';
 import Search from '@/app/ui/search';
 import { CustomerTableSkeleton } from '@/app/ui/skeletons';
+import { fetchCustomersTotal } from './data';
 
 export default async function CustomersPage({
     searchParams,

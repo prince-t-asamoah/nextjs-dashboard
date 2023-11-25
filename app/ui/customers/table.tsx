@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import { fetchFilteredCustomers } from '@/app/lib/data';
 import { UserCircleIcon } from '@heroicons/react/24/outline';
 import { DeleteCustomer, UpdateCustomer } from './buttons';
+import { fetchFilteredCustomers } from '@/app/dashboard/customers/data';
 
 export default async function CustomersTable({
     query,
