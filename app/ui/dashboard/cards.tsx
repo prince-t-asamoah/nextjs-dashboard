@@ -4,6 +4,7 @@ import {
     UserGroupIcon,
     InboxIcon,
 } from '@heroicons/react/24/outline';
+import { Card, Flex, Metric, Text } from '@tremor/react';
 import { lusitana } from '@/app/ui/fonts';
 import { fetchCardData } from '@/app/dashboard/(overview)/data';
 
@@ -14,36 +15,36 @@ const iconMap = {
     invoices: InboxIcon,
 };
 
-export default async function CardWrapper() {
+export default async function SummaryCards() {
     const cardData = await fetchCardData();
 
     return (
-        <>
-            <Card
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <SummaryCard
                 title="Collected"
                 value={cardData.totalPaidInvoices}
                 type="collected"
             />
-            <Card
+            <SummaryCard
                 title="Pending"
                 value={cardData.totalPendingInvoices}
                 type="pending"
             />
-            <Card
+            <SummaryCard
                 title="Total Invoices"
                 value={cardData.numberOfInvoices}
                 type="invoices"
             />
-            <Card
+            <SummaryCard
                 title="Total Customers"
                 value={cardData.numberOfCustomers}
                 type="customers"
             />
-        </>
+        </div>
     );
 }
 
-export function Card({
+export function SummaryCard({
     title,
     value,
     type,
@@ -55,17 +56,16 @@ export function Card({
     const Icon = iconMap[type];
 
     return (
-        <div className="rounded-xl bg-gray-50 p-2 shadow-sm">
-            <div className="flex p-4">
-                {Icon ? <Icon className="h-5 w-5 text-gray-700" /> : null}
-                <h3 className="ml-2 text-sm font-medium">{title}</h3>
-            </div>
-            <p
-                className={`${lusitana.className}
-          truncate rounded-xl bg-white px-4 py-8 text-center text-2xl`}
+        <Card>
+            <Flex
+                alignItems="center"
+                justifyContent="start"
+                className="mb-2 gap-2"
             >
-                {value}
-            </p>
-        </div>
+                {Icon ? <Icon className="h-5 w-5 text-gray-700" /> : null}
+                <Text>{title}</Text>
+            </Flex>
+            <Metric>{value}</Metric>
+        </Card>
     );
 }
