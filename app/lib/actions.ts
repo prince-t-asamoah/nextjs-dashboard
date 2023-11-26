@@ -5,7 +5,7 @@ import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { CustomerFormState, InvoiceFormState } from './definitions';
-import { signIn } from '@/auth';
+import { signIn, signOut } from '@/auth';
 import { uploadImage } from '../service/cloudinary';
 
 const InvoiceSchema = z.object({
@@ -120,20 +120,6 @@ export async function deleteInvoice(id: string) {
     revalidatePath('/dashboard/invoices');
 }
 
-export async function authenticate(
-    _prevState: string | undefined,
-    formData: FormData
-) {
-    try {
-        await signIn('credentials', Object.fromEntries(formData));
-    } catch (error) {
-        if ((error as Error).message.includes('CredentialsSignin')) {
-            return 'CredentialSignin';
-        }
-        throw error;
-    }
-}
-
 //Customers
 export async function addCustomers(
     state: CustomerFormState,
@@ -157,7 +143,7 @@ export async function addCustomers(
         const user = await sql`
         INSERT INTO customers (name, email)
         VALUES (${fullName}, ${email})
-      `;
+        `;
         if (user) {
             // if (profileImage.size > 0) {
             //     const uploadedImage = await uploadImage(profileImage);
@@ -202,10 +188,10 @@ export async function updateCustomer(
 
     try {
         const user = await sql`
-            UPDATE customers
-            SET name=${fullName}, email=${email}
-            WHERE id=${id}
-          `;
+        UPDATE customers
+        SET name=${fullName}, email=${email}
+        WHERE id=${id}
+        `;
         if (user) {
             // if (profileImage.size > 0) {
             //     const uploadedImage = await uploadImage(profileImage);
@@ -236,4 +222,22 @@ export async function deleteCustomer(id: string) {
         console.error('Database Error: Failed to delete customer', '\n', error);
     }
     revalidatePath('/dashboard/customers');
+}
+
+export async function authenticate(
+    _prevState: string | undefined,
+    formData: FormData
+) {
+    try {
+        await signIn('credentials', Object.fromEntries(formData));
+    } catch (error) {
+        if ((error as Error).message.includes('CredentialsSignin')) {
+            return 'CredentialSignin';
+        }
+        throw error;
+    }
+}
+
+export async function logOut() {
+    await signOut();
 }
