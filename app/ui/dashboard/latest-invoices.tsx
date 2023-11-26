@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import { lusitana } from '@/app/ui/fonts';
 import { fetchLatestInvoices } from '@/app/dashboard/(overview)/data';
 import { Card, List, ListItem } from '@tremor/react';
+import Link from 'next/link';
 
 export default async function LatestInvoices() {
     const latestInvoices = await fetchLatestInvoices();
@@ -34,6 +34,11 @@ export default async function LatestInvoices() {
                         </ListItem>
                     ))}
                 </List>
+                <p className="text-right mt-3">
+                    <Link href="/dashboard/invoices" className="text-sm text-gray-600 lg:hover:underline">
+                        View all
+                    </Link>
+                </p>
             </Card>
         </div>
     );
