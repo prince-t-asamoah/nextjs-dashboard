@@ -6,7 +6,6 @@ import {
     RevenueChartSkeleton,
 } from '@/app/ui/skeletons';
 import SummaryCards from '../../ui/dashboard/cards';
-import { lusitana } from '../../ui/fonts';
 import RevenueChart from '../../ui/dashboard/revenue-chart';
 import LatestInvoices from '../../ui/dashboard/latest-invoices';
 
@@ -17,7 +16,7 @@ export default async function DashboardPage() {
                 <HomeIcon className="h-6 w-6" />
                 <span>Home</span>
             </h1>
-            <h2 className="font-semibold py-5">Overview</h2>
+            <h2 className="text-lg font-semibold py-5">Overview</h2>
             <Suspense fallback={<CardSkeleton />}>
                 <SummaryCards />
             </Suspense>
